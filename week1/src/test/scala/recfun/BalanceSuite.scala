@@ -17,6 +17,10 @@ class BalanceSuite extends FunSuite {
     assert(balance("I told him (that it's not (yet) done).\n(But he wasn't listening)".toList))
   }
 
+  test("what, no parenthesis?") {
+    assert(balance("This is a perfect test".toList))
+  }
+
   test("balance: ':-)' is unbalanced") {
     assert(!balance(":-)".toList))
   }
@@ -24,4 +28,13 @@ class BalanceSuite extends FunSuite {
   test("balance: counting is not enough") {
     assert(!balance("())(".toList))
   }
+
+  test("unbalance at the beginning") {
+    assert(!balance("(Shall we start".toList))
+  }
+
+  test("unbalance at the end") {
+    assert(!balance("Shall we finish(".toList))
+  }
+
 }

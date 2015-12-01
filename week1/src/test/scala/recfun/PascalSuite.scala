@@ -19,4 +19,16 @@ class PascalSuite extends FunSuite {
   test("pascal: col=1,row=3") {
     assert(pascal(1,3) === 3)
   }
+
+  test("pascal: col=6,row=6") {
+    assert(pascal(6,6) === 1)
+  }
+
+  test("pascal: col=4,row=6") {
+    assert(pascal(4,6) === 15)
+  }
+
+  test("pascal: col=3,row=7") {
+    assert(pascal(3,7) === 35)
+  }
 }
