@@ -46,8 +46,8 @@ class ListsSuite extends FunSuite {
    *
    * This allows tests to be written in a more readable manner:
    */
-  test("one plus one is three?") {
-    assert(1 + 1 == 3) // This assertion fails! Go ahead and fix it.
+  test("one plus one is two?") {
+    assert(1 + 1 == 2) // This assertion fails! Go ahead and fix it.
   }
 
 
@@ -71,8 +71,8 @@ class ListsSuite extends FunSuite {
    *
    * We recommend to always use the `===` equality operator when writing tests.
    */
-  test("details why one plus one is not three") {
-    assert(1 + 1 === 3) // Fix me, please!
+  test("details why one plus one is not two") {
+    assert(1 + 1 === 2) // Fix me, please!
   }
 
 
@@ -117,8 +117,26 @@ class ListsSuite extends FunSuite {
   test("sum of a few numbers") {
     assert(sum(List(1,2,0)) === 3)
   }
-  
+
+  test("sum of no numbers") {
+    assert(sum(List()) === 0)
+  }
+
+  test("sum of negative numbers") {
+    assert(sum(List(-1,-2,0)) === -3)
+  }
+
   test("max of a few numbers") {
     assert(max(List(3, 7, 2)) === 7)
+  }
+
+  test("max of empty list") {
+    intercept[NoSuchElementException] {
+    max(List[Int]())
+    }
+  }
+
+  test("max of negative numbers") {
+    assert(max(List(-3, -7, -2)) === -2)
   }
 }
