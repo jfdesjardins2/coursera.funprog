@@ -77,6 +77,15 @@ class FunSetSuite extends FunSuite {
     val s1 = singletonSet(1)
     val s2 = singletonSet(2)
     val s3 = singletonSet(3)
+    val s4 = singletonSet(4)
+    val s5 = singletonSet(5)
+
+    val setOnlyOdd = (x:Int) => Math.abs(x) % 2 == 1
+    def isOdd(x:Int): Boolean = Math.abs(x) % 2 == 1
+
+    val setOnlyEven = (x:Int) => Math.abs(x) % 2 == 0
+    def isEven(x:Int):Boolean = Math.abs(x) % 2 == 0
+
   }
 
   /**
@@ -101,14 +110,99 @@ class FunSetSuite extends FunSuite {
     }
   }
 
-  test("union contains all elements of each set") {
+  test("singleton s2 does not include 1") {
     new TestSets {
-      val s = union(s1, s2)
-      assert(contains(s, 1), "Union 1")
-      assert(contains(s, 2), "Union 2")
-      assert(!contains(s, 3), "Union 3")
+      assert(!contains(s2, 1))
     }
   }
 
+  test("union contains all elements of each set") {
+    new TestSets {
+      val s = union(s1, s2)
+      val doubleUnion = union(s, s3)
+      assert(contains(s, 1), "Union 1")
+      assert(contains(s, 2), "Union 2")
+      assert(!contains(s, 3), "Union 3")
+      assert(contains(doubleUnion, 1), "Double Union1")
+      assert(contains(doubleUnion, 3), "Double Union3")
+    }
+  }
 
+  test("intersect contains element in both set") {
+    new TestSets {
+
+      val complexeSet1 = union(union(s1, s2), s3)
+      val complexeSet2 = union(union(s2, s4), s3)
+
+      val s = intersect(complexeSet1, complexeSet2)
+      val doubleIntersect = intersect(s, s3)
+      assert(contains(s, 2), "Intersect 2")
+      assert(contains(s, 3), "Intersect 3")
+      assert(!contains(s, 1), "Intersect 1")
+
+      assert(contains(doubleIntersect, 3), "Double Intersect3")
+      assert(!contains(doubleIntersect, 2), "Double Intersect2")
+    }
+  }
+
+  test("diff returns value not in second set") {
+    new TestSets {
+
+      val complexeSet1 = union(union(s1, s2), s3)
+      val complexeSet2 = union(union(s2, s4), s3)
+
+      val s = diff(complexeSet1, complexeSet2)
+      assert(contains(s, 1))
+      assert(!contains(s, 4))
+      assert(!contains(s, 3))
+      assert(!contains(s, 2))
+    }
+  }
+
+  test("filter on even values") {
+    new TestSets {
+
+      val complexeSet = union(union(union(s1, s2), s3), s4)
+
+      val s = filter(complexeSet, (x:Int) => x%2 == 0)
+      assert(contains(s, 2))
+      assert(contains(s, 4))
+      assert(!contains(s, 1))
+      assert(!contains(s, 3))
+      assert(!contains(s, 5))
+    }
+  }
+
+  test("test forall values") {
+    new TestSets {
+
+      assert(forall(setOnlyOdd, isOdd))
+      assert(!forall(s2, isOdd))
+      assert(!forall(union(s1, s2), isOdd))
+      assert(!forall(x=>true, x=> x != 1000))
+    }
+  }
+
+  test("test exists values") {
+    new TestSets {
+
+      assert(exists(setOnlyOdd, isOdd))
+      assert(!exists(setOnlyOdd, (x:Int) => x %2 == 0))
+
+      val oneEven = union(setOnlyOdd, s2)
+      assert(exists(oneEven, (x:Int) => x%2 == 0))
+
+    }
+  }
+
+  test("test map values") {
+    new TestSets {
+
+      val onlyOdd = map(setOnlyEven, (x:Int) => x + 1)
+      assert(forall(onlyOdd, isOdd))
+
+      def s1to9 = intersect(x => x > 0, y => y < 10)
+      assert(forall(map(s1to9, x => x *2), z => Array(0, 2, 4, 6, 8, 10, 12, 14, 16, 18).contains(z)))
+    }
+  }
 }
