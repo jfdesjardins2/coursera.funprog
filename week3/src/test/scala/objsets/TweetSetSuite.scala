@@ -59,6 +59,32 @@ class TweetSetSuite extends FunSuite {
   test("union: with empty set (2)") {
     new TestSets {
       assert(size(set1.union(set5)) === 4)
+      println(set4c union set4d)
+    }
+  }
+
+  test("union: set5 with itself") {
+    new TestSets {
+      assert(size(set5.union(set5)) === 4)
+      set5 foreach println
+      set5.union(set5) foreach println
+    }
+  }
+
+  test("mostRetweeted set5") {
+    new TestSets {
+      val mostRetweet = set5.mostRetweeted
+      assert(mostRetweet.user == "a" || mostRetweet.user == "b")
+    }
+  }
+
+  test("mostRetweeted smallSet") {
+    new TestSets {
+      val smallSet = set1.incl(c).incl(d)
+      assert(smallSet.mostRetweeted.user == "d")
+
+      val inverseSmallSet = set1.incl(c).incl(d)
+      assert(inverseSmallSet.mostRetweeted.user == "d")
     }
   }
 
